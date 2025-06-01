@@ -1,0 +1,21 @@
+{
+  "name": "Remify",
+  "short_name": "Remify",
+  "description": "A decentralized remittance platform built on Moonbeam",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ec4899",
+  "icons": [
+    {
+      "src": "/moonbeam network.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "/moonbeam network.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+} 
