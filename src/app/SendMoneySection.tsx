@@ -63,8 +63,8 @@ export default function SendMoneySection() {
       setSuccess('Transfer successful!');
       setUsername('');
       setAmount('');
-    } catch (err: any) {
-      setError(err.message || 'Transfer failed.');
+    } catch (error: unknown) {
+      setError(error instanceof Error ? error.message : 'Transfer failed.');
     }   
     setLoading(false);
     setLoadingMsg('');

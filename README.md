@@ -1,7 +1,7 @@
 # Remify - Decentralized Remittance Platform
 
 <div align="center">
-  <img src="/remifylogo.png" alt="Remify Logo" width="200"/>
+  <img src="/public/remifylogo.png" alt="Remify Logo" width="200"/>
   
   [![Moonbeam](https://img.shields.io/badge/Moonbeam-Alpha-orange)](https://moonbeam.network/)
   [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -13,7 +13,7 @@ Remify is a decentralized remittance platform built on Moonbeam Alpha testnet, a
 ## 🌟 Features
 
 <div align="center">
-  <img src="/moonbeam network.jpg" alt="Moonbeam Network" width="400"/>
+  <img src="/public/moonbeam network.jpg" alt="Moonbeam Network" width="400"/>
 </div>
 
 - 🌙 Built on Moonbeam Alpha testnet
@@ -57,7 +57,7 @@ npm run dev
 ## 📱 How to Use Remify
 
 <div align="center">
-  <img src="/dorahacks.jpeg" alt="DoraHacks" width="400"/>
+  <img src="/public/dorahacks.jpeg" alt="DoraHacks" width="400"/>
 </div>
 
 ### 1. Get Testnet Tokens
@@ -120,17 +120,6 @@ The application interacts with two main smart contracts:
 1. `RemifyToken.sol`: USDC token contract
 2. `Remify.sol`: Main platform contract
 
-## 🧪 Testing
-
-1. Unit Tests:
-```bash
-npm test
-```
-
-2. Integration Tests:
-```bash
-npm run test:integration
-```
 
 ## 🤝 Contributing
 
@@ -151,7 +140,7 @@ For support, please open an issue in the GitHub repository or contact the develo
 ## 🙏 Acknowledgments
 
 <div align="center">
-  <img src="/polkadot hi.png" alt="Polkadot" width="200"/>
+  <img src="/public/polkadot hi.png" alt="Polkadot" width="200"/>
 </div>
 
 - Moonbeam Network for the testnet infrastructure

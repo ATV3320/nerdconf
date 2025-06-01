@@ -12,9 +12,17 @@ function isAddress(input: string) {
   return /^0x[a-fA-F0-9]{40}$/.test(input);
 }
 
+interface SearchResult {
+  username: string;
+  accountType: number;
+  totalReceived: string;
+  totalSent: string;
+  wallet: string;
+}
+
 export default function SearchProfilesSection() {
   const [input, setInput] = useState('');
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<SearchResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [searchedByAddress, setSearchedByAddress] = useState(false);
@@ -26,6 +34,11 @@ export default function SearchProfilesSection() {
     setLoading(true);
     setSearchedByAddress(false);
     try {
+      if (!window.ethereum) {
+        setError('Wallet not connected.');
+        setLoading(false);
+        return;
+      }
       const provider = new ethers.BrowserProvider(window.ethereum);
       let username = input;
       if (isAddress(input)) {
@@ -49,7 +62,8 @@ export default function SearchProfilesSection() {
         totalSent: account[2].toString(),
         wallet: account[3],
       });
-    } catch (err: any) {
+    } catch (error: unknown) {
+      console.error('Error searching profiles:', error);
       setError('No user exists with this name or address.');
     }
     setLoading(false);

@@ -9,6 +9,12 @@ import Image from 'next/image';
 const REMITTANCE_ADDRESS = '0x99d669d9f80d5697B903bC2F497f1C9206A1f249';
 const STABLECOIN_ADDRESS = '0x79DDFcC0c7913573e7d9b6583e798F644eD64170';
 
+declare global {
+  interface Window {
+    ethereum?: import('ethers').Eip1193Provider;
+  }
+}
+
 export default function Navbar() {
   const [address, setAddress] = useState<string | null>(null);
   const [name, setName] = useState<string | null>(null);
@@ -29,10 +35,10 @@ export default function Navbar() {
         setConnecting(false);
         return;
       }
-      const provider = new ethers.BrowserProvider((window as any).ethereum);
+      const provider = new ethers.BrowserProvider(window.ethereum as unknown as ethers.Eip1193Provider);
       const accounts = await provider.send('eth_requestAccounts', []);
       const network = await provider.getNetwork();
-      if (network.chainId !== 1287n) {
+      if (network.chainId !== BigInt('1287')) {
         setError('Please switch to the Moonbeam testnet in MetaMask.');
         setConnecting(false);
         return;
@@ -48,8 +54,8 @@ export default function Navbar() {
         setShowRegisterNotif(true);
         setTimeout(() => setShowRegisterNotif(false), 3000);
       }
-    } catch (err: any) {
-      setError(err.message || 'Failed to connect wallet.');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to connect wallet.');
     }
     setConnecting(false);
   };
@@ -62,15 +68,16 @@ export default function Navbar() {
 
   const fetchUsdcInfo = async (userAddr: string) => {
     try {
-      const provider = new ethers.BrowserProvider((window as any).ethereum);
+      const provider = new ethers.BrowserProvider(window.ethereum as unknown as ethers.Eip1193Provider);
       const erc20 = new ethers.Contract(STABLECOIN_ADDRESS, erc20Abi, provider);
       const balance = await erc20.balanceOf(userAddr);
       const allowance = await erc20.allowance(userAddr, REMITTANCE_ADDRESS);
       setUsdcBalance(ethers.formatUnits(balance, 18));
       setUsdcAllowance(ethers.formatUnits(allowance, 18));
-    } catch (e) {
+    } catch (error: unknown) {
       setUsdcBalance('Error');
       setUsdcAllowance('Error');
+      console.error('Error fetching USDC info:', error);
     }
   };
 
@@ -78,14 +85,14 @@ export default function Navbar() {
     if (!address) return;
     setMinting(true);
     try {
-      const provider = new ethers.BrowserProvider((window as any).ethereum);
+      const provider = new ethers.BrowserProvider(window.ethereum as unknown as ethers.Eip1193Provider);
       const signer = await provider.getSigner();
       const erc20 = new ethers.Contract(STABLECOIN_ADDRESS, erc20Abi, signer);
       const tx = await erc20.mint(address, ethers.parseUnits('1000', 18));
       await tx.wait();
       await fetchUsdcInfo(address);
-    } catch (e) {
-      // Optionally handle error
+    } catch (error: unknown) {
+      console.error('Error minting tokens:', error);
     }
     setMinting(false);
   };

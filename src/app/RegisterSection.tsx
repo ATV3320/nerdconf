@@ -12,6 +12,12 @@ const ACCOUNT_TYPES = [
   { label: 'Business', value: 2 },
 ];
 
+// Add minimal interface for event emitter
+interface EthereumEventEmitter {
+  on(event: string, handler: (...args: unknown[]) => void): void;
+  removeListener(event: string, handler: (...args: unknown[]) => void): void;
+}
+
 export default function RegisterSection() {
   const [address, setAddress] = useState<string | null>(null);
   const [registeredName, setRegisteredName] = useState<string | null>(null);
@@ -40,11 +46,11 @@ export default function RegisterSection() {
     };
     fetchWalletAndName();
     if (window.ethereum) {
-      window.ethereum.on('accountsChanged', fetchWalletAndName);
-      window.ethereum.on('chainChanged', fetchWalletAndName);
+      (window.ethereum as unknown as EthereumEventEmitter).on('accountsChanged', fetchWalletAndName);
+      (window.ethereum as unknown as EthereumEventEmitter).on('chainChanged', fetchWalletAndName);
       return () => {
-        window.ethereum.removeListener('accountsChanged', fetchWalletAndName);
-        window.ethereum.removeListener('chainChanged', fetchWalletAndName);
+        (window.ethereum as unknown as EthereumEventEmitter).removeListener('accountsChanged', fetchWalletAndName);
+        (window.ethereum as unknown as EthereumEventEmitter).removeListener('chainChanged', fetchWalletAndName);
       };
     }
   }, []);
@@ -72,8 +78,8 @@ export default function RegisterSection() {
       await tx.wait();
       setSuccess('Registration successful!');
       setRegisteredName(username.toLowerCase());
-    } catch (err: any) {
-      setError(err.message || 'Registration failed.');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Registration failed.');
     }
     setLoading(false);
   };
@@ -95,7 +101,7 @@ export default function RegisterSection() {
               <svg width="18" height="18" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="#888" strokeWidth="2"/><text x="12" y="16" textAnchor="middle" fontSize="12" fill="#888">i</text></svg>
               {infoHover && (
                 <span className="absolute left-6 top-0 bg-gray-800 text-white text-xs rounded px-2 py-1 z-10 whitespace-nowrap shadow-lg">
-                  we'll convert the username to lowercase
+                  we&apos;ll convert the username to lowercase
                 </span>
               )}
             </span>

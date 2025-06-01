@@ -3,7 +3,6 @@ import RegisterSection from "../RegisterSection";
 import SearchProfilesSection from "../SearchProfilesSection";
 import SendMoneySection from "../SendMoneySection";
 import Image from 'next/image';
-import RotatingBanner from "../RotatingBanner";
 import Navbar from "../Navbar";
 
 export default function Home() {
